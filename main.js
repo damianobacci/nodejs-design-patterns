@@ -1,17 +1,7 @@
-import { FindRegex } from "./chapter3/findRegex.js";
+import { ticker } from "./chapter3/3.2/ticker.js";
 
-const findRegexInstance = new FindRegex(/hello \w+/g);
+const tickerInstance = ticker(5000, (ticks) => console.log('finished!', ticks))
 
-findRegexInstance
-    .addFile('./chapter3/file1.txt')
-    .addFile('./chapter3/file2.txt')
-    .on('finish', (count, matchCount) => {
-        console.log(`Processing ended. ${count} files processed with ${matchCount} matches found.`);
-    }).on('reading', (count, fileList) => {
-        console.log(`Reading file ${count} of ${fileList.length}`);
-    }).on('found', (file, match) => {
-        console.log(`Matched "${match}" in file ${file}`);
-    }).on('error', (err) => {
-        console.error(`Error emitted: ${err.message}`);
-    })
-    .find()
+tickerInstance.on('tick', (i) => {
+    console.log('tick', i)
+})

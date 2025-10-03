@@ -1,10 +1,10 @@
-import { FindRegex } from "./chapter3/findRegex.js";
+import { FindRegex } from "./chapter3/3.1/findRegex.js";
 
 const findRegexInstance = new FindRegex(/hello \w+/g);
 
 findRegexInstance
-    .addFile('./chapter3/file1.txt')
-    .addFile('./chapter3/file2.txt')
+    .addFile('./chapter3/3.1/file1.txt')
+    .addFile('./chapter3/3.1/file2.txt')
     .on('finish', (count, matchCount) => {
         console.log(`Processing ended. ${count} files processed with ${matchCount} matches found.`);
     }).on('reading', (count, fileList) => {
