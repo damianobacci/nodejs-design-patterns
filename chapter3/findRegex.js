@@ -20,8 +20,8 @@ export class FindRegex extends EventEmitter {
   let readingIndex = 1
 
   for (const file of this.files) {
-    this.emit('reading', readingIndex++, this.files)
     readFile(file, 'utf-8', (err, content) => {
+    this.emit('reading', readingIndex++, this.files)
       if (err) {
         return this.emit('error', err)
       }
@@ -29,11 +29,12 @@ export class FindRegex extends EventEmitter {
 
       const match = content.match(this.regex)
       if (match) {
+        matchCount++
         for (const elem of match) {
           this.emit('found', file, elem)
         }
 
-        matchCount++
+        
       }
 
       processed++
