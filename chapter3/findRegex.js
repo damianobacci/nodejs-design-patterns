@@ -14,22 +14,37 @@ export class FindRegex extends EventEmitter {
     }
     
     find() {
-        for (const file  of this.files) {
-            readFile(file, 'utf-8', (err, content) => {
-                if (err) {
-                    return this.emit('error', err)
-                }
-                this.emit('fileread', file)
+  const total = this.files.length
+  let processed = 0
+  let matchCount = 0
+  let readingIndex = 1
 
-                const match = content.match(this.regex)
-                if (match) {
-                    for (const elem of match) {
-                        this.emit('found', file, elem)
-                    }
-                }
-            })
+  for (const file of this.files) {
+    this.emit('reading', readingIndex++, this.files)
+    readFile(file, 'utf-8', (err, content) => {
+      if (err) {
+        return this.emit('error', err)
+      }
+      this.emit('fileread', file)
+
+      const match = content.match(this.regex)
+      if (match) {
+        for (const elem of match) {
+          this.emit('found', file, elem)
         }
-        return this
-    }
+
+        matchCount++
+      }
+
+      processed++
+      if (processed === total) {
+        this.emit('finish', processed, matchCount)
+      }
+    })
+  }
+
+  return this
+}
+
 }
 
